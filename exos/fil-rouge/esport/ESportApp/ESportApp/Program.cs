@@ -110,13 +110,13 @@ DataSerie<LolMatch> lol =
 
 // DONE 05: Lit plusieurs fichiers matches
 
-string[] valorantfiles = Directory.GetFiles(folder, "valorant*.csv");
-List<ValorantMatch> vgames = new();
-foreach(string vf in valorantfiles)
-{
-    vgames.AddRange(DataSerie<ValorantMatch>.FromCsv(vf, ParseValorant).Values.ToList());
-}
-valorant = DataSerie<ValorantMatch>.From(vgames);
+valorant = DataSerie<ValorantMatch>
+    .From(
+        Directory
+        .GetFiles(folder, "valorant*.csv")
+        .SelectMany(f => DataSerie<ValorantMatch>.FromCsv(f, ParseValorant).Values)
+        .ToList()
+    );
 
 // DONE 01: Filter by player
 if (player is not null)
