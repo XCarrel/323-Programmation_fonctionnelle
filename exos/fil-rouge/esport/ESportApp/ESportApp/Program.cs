@@ -100,12 +100,23 @@ if (!filterModes.Contains(filterMode))
 
 // ─── Chargement des données ──────────────────────────────────────────────────
 
+// DONE 04: Load data from a specific folder
 DataSerie<ValorantMatch> valorant =
     DataSerie<ValorantMatch>.FromCsv($"{folder}/valorant.csv", ParseValorant);
 DataSerie<Cs2Match> cs2 =
     DataSerie<Cs2Match>.FromCsv($"{folder}/cs2.csv", ParseCS2);
 DataSerie<LolMatch> lol =
     DataSerie<LolMatch>.FromCsv($"{folder}/lol.csv", ParseLoL);
+
+// DONE 05: Lit plusieurs fichiers matches
+
+string[] valorantfiles = Directory.GetFiles(folder, "valorant*.csv");
+List<ValorantMatch> vgames = new();
+foreach(string vf in valorantfiles)
+{
+    vgames.AddRange(DataSerie<ValorantMatch>.FromCsv(vf, ParseValorant).Values.ToList());
+}
+valorant = DataSerie<ValorantMatch>.From(vgames);
 
 // DONE 01: Filter by player
 if (player is not null)
