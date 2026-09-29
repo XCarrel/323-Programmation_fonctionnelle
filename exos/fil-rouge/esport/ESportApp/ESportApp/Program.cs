@@ -106,6 +106,7 @@ DataSerie<Cs2Match> cs2 =
 DataSerie<LolMatch> lol =
     DataSerie<LolMatch>.FromCsv(@"data/lol.csv", ParseLoL);
 
+// DONE 01: Filter by player
 if (player is not null)
 {
     valorant = DataSerie<ValorantMatch>.From(valorant.Values.Where(vg => vg.Player == player));
@@ -113,9 +114,23 @@ if (player is not null)
     lol = DataSerie<LolMatch>.From(lol.Values.Where(lg => lg.Player == player));
 }
 
-Console.WriteLine(valorant);
-Console.WriteLine(cs2);
-Console.WriteLine(lol);
+// DONE 02: Filter by game
+if (game is not null)
+{
+    switch (game)
+    {
+        case "valorant":
+            Console.WriteLine(valorant);
+            break;
+        case "cs2":
+            Console.WriteLine(cs2);
+            break;
+        case "lol":
+            Console.WriteLine(lol);
+            break;
+    }
+}
+
 
 Console.WriteLine("That's all folks!");
 
