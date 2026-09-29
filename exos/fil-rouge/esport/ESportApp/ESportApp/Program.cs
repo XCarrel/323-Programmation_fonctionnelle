@@ -14,13 +14,13 @@ const string version = "Base formative";
 
 string[] knownFlags =
 {
-    "--help", "--version", "--game", "--player", "--filter", "--folder"
+    "--help", "--version", "--game", "--player", "--filter"
 };
 
 // Les flags qui attendent une valeur juste après eux
 string[] valueFlags =
 {
-    "--game", "--player", "--filter", "--folder"
+    "--game", "--player", "--filter"
 };
 
 Console.WriteLine($"EsportApp v{version}");
@@ -56,7 +56,6 @@ if (flagSansValeur != null)
 string? game = ValueOf("--game");
 string? player = ValueOf("--player");
 string filterMode = ValueOf("--filter") ?? "all";
-string folder = ValueOf("--folder") ?? Directory.GetCurrentDirectory();
 
 // Tables de fonctions : le flag CLI choisit une fonction, pas un if/else.
 // Ajouter un critère = ajouter une ligne dans la table.
@@ -100,54 +99,34 @@ if (!filterModes.Contains(filterMode))
 
 // ─── Chargement des données ──────────────────────────────────────────────────
 
-// DONE 04: Load data from a specific folder
+// TODO 04: Ajouter le traitement d'un argument supplémentaire '--folder' qui permet de spécifier dans quel dossier sont les fichiers CSV
+//          Si le paramètre n'est pas spécifié: prendre le répertoire courant (Directory.GetCurrentDirectory())
+//          Lire les fichiers CSV dans le dossier spécifié
+
+
 DataSerie<ValorantMatch> valorant =
-    DataSerie<ValorantMatch>.FromCsv($"{folder}/valorant.csv", ParseValorant);
+    DataSerie<ValorantMatch>.FromCsv(@"data/valorant.csv", ParseValorant);
 DataSerie<Cs2Match> cs2 =
-    DataSerie<Cs2Match>.FromCsv($"{folder}/cs2.csv", ParseCS2);
+    DataSerie<Cs2Match>.FromCsv(@"data/cs2.csv", ParseCS2);
 DataSerie<LolMatch> lol =
-    DataSerie<LolMatch>.FromCsv($"{folder}/lol.csv", ParseLoL);
+    DataSerie<LolMatch>.FromCsv(@"data/lol.csv", ParseLoL);
 
-// DONE 05: Lit plusieurs fichiers matches
+// TODO 05: Lire plusieurs fichiers pour un jeu. Par exemple 'lol-2025.csv' et 'lol-2026.csv'.
+//          Tous les fichiers dont le nom commence par le nom du jeu doivent être lus.
+//          Utiliser Directory.GetFiles()
+//          L'utilisation d'une boucle 'foreach(...)' est autorisée
 
-valorant = DataSerie<ValorantMatch>
-    .From(
-        Directory
-        .GetFiles(folder, "valorant*.csv")
-        .SelectMany(f => DataSerie<ValorantMatch>.FromCsv(f, ParseValorant).Values)
-        .ToList()
-    );
+// TODO 06: Refactoriser avec SelectMany pour faire disparaître la boucle foreach
 
-// DONE 01: Filter by player
-if (player is not null)
-{
-    valorant = DataSerie<ValorantMatch>.From(valorant.Values.Where(vg => vg.Player == player));
-    cs2 = DataSerie<Cs2Match>.From(cs2.Values.Where(cg => cg.Player == player));
-    lol = DataSerie<LolMatch>.From(lol.Values.Where(lg => lg.Player == player));
-}
+// TODO 02: Appliquer le filtre par joueur
 
-// DONE 02: Filter by game
-valorant = DataSerie<ValorantMatch>.From(valorant.Values.Where(valorantFilters[filterMode]));
-cs2 = DataSerie<Cs2Match>.From(cs2.Values.Where(cs2Filters[filterMode]));
-lol = DataSerie<LolMatch>.From(lol.Values.Where(lolFilters[filterMode]));
+// TODO 03: Appliquer le filtre par résultat
 
-if (game is not null)
-{
-    switch (game)
-    {
-        case "valorant":
-            Console.WriteLine(valorant);
-            break;
-        case "cs2":
-            Console.WriteLine(cs2);
-            break;
-        case "lol":
-            Console.WriteLine(lol);
-            break;
-    }
-}
+// TODO 01: N'afficher que le ou les jeu demandés
 
-// DONE 03: Filter by result
+Console.WriteLine(valorant);
+Console.WriteLine(cs2);
+Console.WriteLine(lol);
 
 Console.WriteLine("That's all folks!");
 
