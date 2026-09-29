@@ -106,6 +106,13 @@ DataSerie<Cs2Match> cs2 =
 DataSerie<LolMatch> lol =
     DataSerie<LolMatch>.FromCsv(@"data/lol.csv", ParseLoL);
 
+if (player is not null)
+{
+    valorant = DataSerie<ValorantMatch>.From(valorant.Values.Where(vg => vg.Player == player));
+    cs2 = DataSerie<Cs2Match>.From(cs2.Values.Where(cg => cg.Player == player));
+    lol = DataSerie<LolMatch>.From(lol.Values.Where(lg => lg.Player == player));
+}
+
 Console.WriteLine(valorant);
 Console.WriteLine(cs2);
 Console.WriteLine(lol);
