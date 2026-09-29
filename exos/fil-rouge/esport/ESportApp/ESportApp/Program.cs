@@ -115,6 +115,10 @@ if (player is not null)
 }
 
 // DONE 02: Filter by game
+valorant = DataSerie<ValorantMatch>.From(valorant.Values.Where(valorantFilters[filterMode]));
+cs2 = DataSerie<Cs2Match>.From(cs2.Values.Where(cs2Filters[filterMode]));
+lol = DataSerie<LolMatch>.From(lol.Values.Where(lolFilters[filterMode]));
+
 if (game is not null)
 {
     switch (game)
@@ -131,6 +135,7 @@ if (game is not null)
     }
 }
 
+// DONE 03: Filter by result
 
 Console.WriteLine("That's all folks!");
 
