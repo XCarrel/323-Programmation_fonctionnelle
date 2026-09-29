@@ -14,13 +14,13 @@ const string version = "Base formative";
 
 string[] knownFlags =
 {
-    "--help", "--version", "--game", "--player", "--filter"
+    "--help", "--version", "--game", "--player", "--filter", "--folder"
 };
 
 // Les flags qui attendent une valeur juste après eux
 string[] valueFlags =
 {
-    "--game", "--player", "--filter"
+    "--game", "--player", "--filter", "--folder"
 };
 
 Console.WriteLine($"EsportApp v{version}");
@@ -56,6 +56,7 @@ if (flagSansValeur != null)
 string? game = ValueOf("--game");
 string? player = ValueOf("--player");
 string filterMode = ValueOf("--filter") ?? "all";
+string folder = ValueOf("--folder") ?? Directory.GetCurrentDirectory();
 
 // Tables de fonctions : le flag CLI choisit une fonction, pas un if/else.
 // Ajouter un critère = ajouter une ligne dans la table.
@@ -100,11 +101,11 @@ if (!filterModes.Contains(filterMode))
 // ─── Chargement des données ──────────────────────────────────────────────────
 
 DataSerie<ValorantMatch> valorant =
-    DataSerie<ValorantMatch>.FromCsv(@"data/valorant.csv", ParseValorant);
+    DataSerie<ValorantMatch>.FromCsv($"{folder}/valorant.csv", ParseValorant);
 DataSerie<Cs2Match> cs2 =
-    DataSerie<Cs2Match>.FromCsv(@"data/cs2.csv", ParseCS2);
+    DataSerie<Cs2Match>.FromCsv($"{folder}/cs2.csv", ParseCS2);
 DataSerie<LolMatch> lol =
-    DataSerie<LolMatch>.FromCsv(@"data/lol.csv", ParseLoL);
+    DataSerie<LolMatch>.FromCsv($"{folder}/lol.csv", ParseLoL);
 
 // DONE 01: Filter by player
 if (player is not null)
